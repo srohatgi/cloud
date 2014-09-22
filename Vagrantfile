@@ -11,7 +11,6 @@ SCRIPT
 $test_script = <<SCRIPT
 echo "----------TESTING ALL COMPONENTS--------\n\n----------- JAVA VERSION -------------- \n"
 java -version
-exit 0
 SCRIPT
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
@@ -77,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "chef/cookbooks"
-    #chef.add_recipe "java"
+    chef.add_recipe "java"
     
     # You may also specify custom JSON attributes:
     chef.json = {
