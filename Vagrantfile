@@ -81,7 +81,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     # You may also specify custom JSON attributes:
     chef.json = {
-      :ip_address => '192.168.33.20',
+      :ip_address => '192.168.33.30',
       :chef_environment => "QA",
       :platform => "ubuntu",
       :platform_family => "debian",
