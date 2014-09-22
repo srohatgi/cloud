@@ -1,0 +1,79 @@
+export PS1="\`if [ \$? = 0 ]; then echo \[\e[33m\][\W]\[\e[0m\]; else echo \[\e[31m\][\W]\[\e[0m\]; fi;\` \`echo -ne \"\xE2\x98\x81\"\`  "
+alias c=clear
+alias ls="ls -FGC"
+alias ks=ls
+alias cx="chmod 755"
+alias vm="ssh -i ~/.vagrant.d/insecure_private_key vagrant@192.168.33.30"
+
+# gradle stuff
+# make gradle daemon, so that compilations are faster
+export GRADLE_OPTS="-Dorg.gradle.daemon=true"
+# turning on tomcat debugging port
+debug1() {
+  export GRADLE_OPTS="-Dorg.gradle.daemon=true -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+}
+
+# knife run ssh command on node
+kssh() {
+  local nodename=${1:-undefined}
+  shift
+  local command=${@:-undefined}
+
+  [[ "$nodename" = "undefined" || "$command" = "undefined" ]] \
+      && echo "usage: kssh <nodename|role> <command>..." \
+      && return 1
+
+  local type=name
+  case ${nodename:0:1} in
+    [a-z]) 
+    type=role
+    ;;
+  esac
+
+  knife ssh $type:$nodename "$command" -x ubuntu
+}
+
+# list all info on a node
+kinfo() {
+  local nodename=${1:-undefined}
+
+  [[ "$nodename" = "undefined" ]] \
+      && echo "usage: kinfo <nodename>" \
+      && return 1
+  
+  knife node show $nodename -a node -F json
+}
+
+rca() {
+  echo "stopping core audio, useful for when audio in airplay doesn't work"
+  sudo kill -9 `ps ax|grep 'coreaudio[a-z]' |awk '{print $1}'`
+}
+
+watch() {
+ local command=${1:-undefined}
+
+ [[ "$command" == "undefined" ]] \
+   && echo "usage: watch <command> [<duration>]" \
+   && return 1
+
+ local duration=${2:-1}
+
+ while :; do
+   date
+   bash -c "$command"
+   sleep $duration
+ done
+}
+
+pidbyport() {
+  local port=${1:-undefined}
+  [[ "$port" = "undefined" ]] \
+    && echo "usage: pidbyport <port_num>" \
+    && return 1
+
+  lsof -i :$port
+}
+
+matrix() {
+  COL=$(( $(tput cols) / 2 )); clear; tput setaf 2; while :; do tput cup $((RANDOM%COL)) $((RANDOM%COL)); printf "%$((RANDOM%COL))s" $((RANDOM%2)); done
+}
