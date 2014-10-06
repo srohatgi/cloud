@@ -6,3 +6,8 @@
 ###
 .chef/*.pem
 .chef/encrypted_data_bag_secret
+
+### project specific
+#
+#######
+Devtoolfile
