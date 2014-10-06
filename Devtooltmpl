@@ -1,5 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"
+  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
   config.vm.provider :aws do |aws, override|
     aws.access_key_id = "AWS_KEY"
@@ -9,7 +10,7 @@ Vagrant.configure("2") do |config|
 
     aws.ami = "AWS_AMI"
     aws.instance_type = "AWS_INSTANCE_TYPE"
-    aws.security_groups = "FE"
+    aws.security_groups = [ "FE", "MAINTENANCE" ]
 
     override.ssh.username = "ubuntu"
     override.ssh.private_key_path = "PVT_KEY"
