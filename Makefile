@@ -19,4 +19,10 @@ Devtoolfile: Devtooltmpl
 	sed "s;PVT_KEY;$$PVT_KEY;g" > Devtoolfile
 
 devtools: Devtoolfile
-	VAGRANT_VAGRANTFILE=Devtoolfile vagrant up
+	VAGRANT_VAGRANTFILE=Devtoolfile vagrant up --provider=aws
+
+destroy:
+	VAGRANT_VAGRANTFILE=Devtoolfile vagrant destroy
+
+ssh:
+	VAGRANT_VAGRANTFILE=Devtoolfile vagrant ssh
