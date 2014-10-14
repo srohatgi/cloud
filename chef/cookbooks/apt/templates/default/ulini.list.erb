@@ -1,0 +1,6 @@
+<% if  @env.eql?("PROD") ||  @env.eql?("MKTG") -%>
+deb http://packagemanager.devtools.sciul.com stable main
+<% else -%>
+deb http://packagemanager.devtools.sciul.com unstable main
+deb http://packagemanager.devtools.sciul.com stable main
+<% end -%>

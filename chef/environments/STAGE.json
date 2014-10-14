@@ -1,0 +1,34 @@
+{
+  "name": "STAGE",
+  "description": "",
+  "cookbook_versions": {
+    "elasticsearch": "= 1.1.4",
+    "nagios": "= 5.7.8"
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+    "tomcat": {
+      "base_version": 7
+    },
+    "cassandra": {
+      "package_name": "cassandra",
+      "version": "2.0.4"
+    },
+    "ulini": {
+      "user": "ubuntu",
+      "secretpath": "/tmp/ulini_chef-secret_key"
+    },
+    "java": {
+      "oracle": {
+        "accept_oracle_download_terms": true
+      },
+      "jdk_version": "7",
+      "accept_license_agreement": true,
+      "install_flavor": "oracle"
+    },
+    "set_fqdn": "*.sciul.com"
+  },
+  "override_attributes": {
+  }
+}

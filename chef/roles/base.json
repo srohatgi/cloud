@@ -1,0 +1,52 @@
+{
+  "name": "base",
+  "description": "",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+  ],
+  "env_run_lists": {
+    "DEV": [
+      "recipe[build-essential]",
+      "recipe[apt]",
+      "recipe[java]"
+    ],
+    "OPS": [
+      "recipe[hostname]",
+      "recipe[apt]",
+      "recipe[build-essential]",
+      "recipe[chef-client]",
+      "recipe[ntp]",
+      "recipe[ohai]"
+    ],
+    "PROD": [
+      "recipe[apt]",
+      "recipe[chef-client]",
+      "recipe[hostname]",
+      "recipe[java]",
+      "recipe[ntp]",
+      "recipe[ohai]",
+      "recipe[ruby-cookbook::1.9.1]"
+    ],
+    "QA": [
+      "recipe[apt]",
+      "recipe[chef-client]",
+      "recipe[hostname]",
+      "recipe[java]",
+      "recipe[ntp]",
+      "recipe[ohai]",
+    ],
+    "STAGE": [
+      "recipe[apt]",
+      "recipe[chef-client]",
+      "recipe[hostname]",
+      "recipe[java]",
+      "recipe[ntp]",
+      "recipe[ohai]",
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+# Tomcat auto-start
+#
+# description: Auto-starts tomcat
+# processname: tomcat
+# pidfile: /var/run/tomcat.pid
+
+case $1 in
+start)
+sh /home/vagrant/downloads/other/apache-tomcat-7.0.26/bin/startup.sh
+;;
+stop)
+sh /home/vagrant/downloads/other/apache-tomcat-7.0.26/bin/shutdown.sh
+;;
+restart)
+sh /home/vagrant/downloads/other/apache-tomcat-7.0.26/bin/shutdown.sh
+sh /home/vagrant/downloads/other/apache-tomcat-7.0.26/bin/startup.sh
+;;
+status)
+pid=$(ps -ef | grep -m 1 tomcat | awk '{ print $2}')
+echo 'Tomcat is running with pid' $pid
+esac
+exit 0
