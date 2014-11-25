@@ -6,6 +6,8 @@ $setup_script = <<SCRIPT
 # install our supported chef
 sudo dpkg -i /home/vagrant/downloads/debs/chef_11.8.2-1.ubuntu.12.04_amd64.deb
 
+sudo apt-get update
+
 SCRIPT
 
 $test_script = <<SCRIPT
@@ -80,6 +82,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dev.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "chef/cookbooks"
       chef.add_recipe "java"
+      chef.add_recipe "postgresql"
+      chef.add_recipe "postgresql::server"
       
       # You may also specify custom JSON attributes:
       chef.json = {
@@ -90,7 +94,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :java => { "jdk" => { "7" => { "x86_64" => { "url" => "file:///home/vagrant/downloads/other/jdk-7u51-linux-x64.tar.gz" }}},
                    :install_flavor => "oracle" },
         :ulini => { :user => "vagrant" },
-        :tomcat => { :java_options => "-Xmx1G -Xms1G -Djava.awt.headless=true" } 
+        :tomcat => { :java_options => "-Xmx1G -Xms1G -Djava.awt.headless=true" },
+        :postgresql => { :password => { :postgres => "admin" } }
       }
       chef.log_level = :debug
     end
