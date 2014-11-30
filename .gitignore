@@ -11,3 +11,8 @@
 #
 #######
 Devtoolfile
+
+### python specific
+#
+*.pyc
+.idea
