@@ -5,9 +5,10 @@ from rest_framework.parsers import JSONParser
 from hunts.models import Hunt, Business, User
 from hunts.serializers import HuntSerializer, BusinessSerializer, UserSerializer
 
+
 class JSONResponse(HttpResponse):
     """
-    An HttpResponse that renders its content into JSON.
+    A HttpResponse that renders its content into JSON.
     """
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data)
@@ -35,7 +36,7 @@ def hunt_list(request):
 
 
 @csrf_exempt
-def snippet_detail(request, pk):
+def hunt_detail(request, pk):
     """
     Retrieve, update or delete a code snippet.
     """
