@@ -1,62 +1,50 @@
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
 from hunts.models import Hunt, Business, User
 from hunts.serializers import HuntSerializer, BusinessSerializer, UserSerializer
 
 
-class JSONResponse(HttpResponse):
+@api_view(['GET', 'POST'])
+def hunt_list(request, format=None):
     """
-    A HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-
-@csrf_exempt
-def hunt_list(request):
-    """
-    List all code snippets, or create a new snippet.
+    List all hunts or create a new hunt
     """
     if request.method == 'GET':
         hunts = Hunt.objects.all()
         serializer = HuntSerializer(hunts, many=True)
-        return JSONResponse(serializer.data)
+        return Response(serializer.data)
 
     elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = HuntSerializer(data=data)
+        serializer = HuntSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JSONResponse(serializer.data, status=201)
-        return JSONResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-def hunt_detail(request, pk):
+@api_view(['GET', 'PUT', 'DELETE'])
+def hunt_detail(request, pk, format=None):
     """
-    Retrieve, update or delete a code snippet.
+    Retrieve, update or delete a hunt.
     """
     try:
         hunt = Hunt.objects.get(pk=pk)
     except Hunt.DoesNotExist:
-        return HttpResponse(status=404)
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = HuntSerializer(hunt)
-        return JSONResponse(serializer.data)
+        return Response(serializer.data)
 
     elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = HuntSerializer(hunt, data=data)
+        serializer = HuntSerializer(hunt, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JSONResponse(serializer.data)
-        return JSONResponse(serializer.errors, status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         hunt.delete()
-        return HttpResponse(status=204)
+        return HttpResponse(status=status.HTTP_204_NO_CONTENT)

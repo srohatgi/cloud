@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+from rest_framework.urlpatterns import format_suffix_patterns
 
 
 # Serializers define the API representation.
@@ -25,3 +26,6 @@ urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include('hunts.urls')))
+
+# understand requested format by url endpoint
+#urlpatterns = format_suffix_patterns(urlpatterns)
