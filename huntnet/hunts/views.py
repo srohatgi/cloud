@@ -4,19 +4,19 @@ from rest_framework import status
 from rest_framework.response import Response
 from hunts.models import Hunt, Business, User
 from hunts.serializers import HuntSerializer, BusinessSerializer, UserSerializer
+from rest_framework.views import APIView
 
 
-@api_view(['GET', 'POST'])
-def hunt_list(request, format=None):
+class HuntList(APIView):
     """
     List all hunts or create a new hunt
     """
-    if request.method == 'GET':
+    def get(self, request, format=None):
         hunts = Hunt.objects.all()
         serializer = HuntSerializer(hunts, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+    def post(self, request, format=None):
         serializer = HuntSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -24,27 +24,30 @@ def hunt_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def hunt_detail(request, pk, format=None):
+class HuntDetail(APIView):
     """
     Retrieve, update or delete a hunt.
     """
-    try:
-        hunt = Hunt.objects.get(pk=pk)
-    except Hunt.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+    def get_object(self, pk):
+        try:
+            hunt = Hunt.objects.get(pk=pk)
+        except Hunt.DoesNotExist:
+            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
+    def get(self, request, pk, format=None):
+        hunt = self.get_object(pk)
         serializer = HuntSerializer(hunt)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+    def put(self, request, pk, format=None):
+        hunt = self.get_object(pk)
         serializer = HuntSerializer(hunt, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk, format=None):
+        hunt = self.get_object(pk)
         hunt.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
