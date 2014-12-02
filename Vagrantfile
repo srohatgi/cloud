@@ -85,6 +85,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       chef.add_recipe "java"
       chef.add_recipe "postgresql"
       chef.add_recipe "postgresql::server"
+      chef.add_recipe "elasticsearch::default"
       
       # You may also specify custom JSON attributes:
       chef.json = {
@@ -96,7 +97,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                    :install_flavor => "oracle" },
         :ulini => { :user => "vagrant" },
         :tomcat => { :java_options => "-Xmx1G -Xms1G -Djava.awt.headless=true" },
-        :postgresql => { :password => { :postgres => "admin" } }
+        :postgresql => { :password => { :postgres => "admin" } },
+        :elasticsearch => { :cluster => { :name => "elasticsearch_test_chef" } }
       }
       chef.log_level = :debug
     end
