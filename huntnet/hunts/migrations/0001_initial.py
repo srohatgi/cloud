@@ -2,11 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -26,7 +28,9 @@ class Migration(migrations.Migration):
                 ('website', models.CharField(max_length=255)),
                 ('createdOn', models.DateTimeField(auto_now_add=True)),
                 ('updatedOn', models.DateTimeField(auto_now=True)),
-                ('createdBy', models.ForeignKey(related_name='+', to='hunts.Business')),
+                ('createdBy', models.ForeignKey(related_name='+', to=settings.AUTH_USER_MODEL)),
+                ('ownerId', models.ForeignKey(related_name='hunts', to=settings.AUTH_USER_MODEL)),
+                ('updatedBy', models.ForeignKey(related_name='+', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('createdOn',),
@@ -46,52 +50,12 @@ class Migration(migrations.Migration):
                 ('createdOn', models.DateTimeField(auto_now_add=True)),
                 ('updatedOn', models.DateTimeField(auto_now=True)),
                 ('businessId', models.ForeignKey(to='hunts.Business')),
+                ('createdBy', models.ForeignKey(related_name='+', to=settings.AUTH_USER_MODEL)),
+                ('updatedBy', models.ForeignKey(related_name='+', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('createdOn',),
             },
             bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='User',
-            fields=[
-                ('userId', models.CharField(max_length=37, serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=255)),
-                ('email', models.CharField(max_length=255)),
-                ('login', models.CharField(max_length=255)),
-                ('password', models.CharField(max_length=255)),
-                ('createdOn', models.DateTimeField(auto_now_add=True)),
-                ('updatedOn', models.DateTimeField(auto_now=True)),
-                ('createdBy', models.ForeignKey(related_name='+', to='hunts.User')),
-                ('updatedBy', models.ForeignKey(related_name='+', to='hunts.User')),
-            ],
-            options={
-                'ordering': ('createdOn',),
-            },
-            bases=(models.Model,),
-        ),
-        migrations.AddField(
-            model_name='hunt',
-            name='createdBy',
-            field=models.ForeignKey(related_name='+', to='hunts.User'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='hunt',
-            name='updatedBy',
-            field=models.ForeignKey(related_name='+', to='hunts.User'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='business',
-            name='ownerId',
-            field=models.ForeignKey(to='hunts.User'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='business',
-            name='updatedBy',
-            field=models.ForeignKey(related_name='+', to='hunts.Business'),
-            preserve_default=True,
         ),
     ]

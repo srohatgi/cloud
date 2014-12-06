@@ -1,53 +1,67 @@
-from django.http import HttpResponse
-from rest_framework.decorators import api_view
-from rest_framework import status
-from rest_framework.response import Response
-from hunts.models import Hunt, Business, User
-from hunts.serializers import HuntSerializer, BusinessSerializer, UserSerializer
-from rest_framework.views import APIView
+from hunts.models import Hunt, Business, Follow, Comment
+from hunts.serializers import HuntSerializer, BusinessSerializer, FollowSerializer, CommentSerializer
+from rest_framework import generics
 
 
-class HuntList(APIView):
+class HuntList(generics.ListCreateAPIView):
     """
     List all hunts or create a new hunt
     """
-    def get(self, request, format=None):
-        hunts = Hunt.objects.all()
-        serializer = HuntSerializer(hunts, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = HuntSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = Hunt.objects.all()
+    serializer_class = HuntSerializer
 
 
-class HuntDetail(APIView):
+class HuntDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve, update or delete a hunt.
     """
-    def get_object(self, pk):
-        try:
-            hunt = Hunt.objects.get(pk=pk)
-        except Hunt.DoesNotExist:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+    queryset = Hunt.objects.all()
+    serializer_class = HuntSerializer
 
-    def get(self, request, pk, format=None):
-        hunt = self.get_object(pk)
-        serializer = HuntSerializer(hunt)
-        return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        hunt = self.get_object(pk)
-        serializer = HuntSerializer(hunt, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class BusinessList(generics.ListCreateAPIView):
+    """
+    List all businesses or create a new business
+    """
+    queryset = Business.objects.all()
+    serializer_class = BusinessSerializer
 
-    def delete(self, request, pk, format=None):
-        hunt = self.get_object(pk)
-        hunt.delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+class BusinessDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update or delete a business
+    """
+    queryset = Business.objects.all()
+    serializer_class = BusinessSerializer
+
+
+class FollowList(generics.ListCreateAPIView):
+    """
+    List all businesses or create a new business
+    """
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+
+
+class FollowDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update or delete a business
+    """
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+
+
+class CommentList(generics.ListCreateAPIView):
+    """
+    List all businesses or create a new business
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update or delete a business
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

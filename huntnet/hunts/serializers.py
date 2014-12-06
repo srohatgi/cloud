@@ -1,7 +1,7 @@
 __author__ = 'sumeetrohatgi'
 
 from rest_framework import serializers
-from hunts.models import Hunt, Business, User
+from hunts.models import Hunt, Business, Comment, Follow
 
 
 class HuntSerializer(serializers.ModelSerializer):
@@ -21,10 +21,15 @@ class BusinessSerializer(serializers.ModelSerializer):
                   'createdBy', 'updatedBy', 'createdOn', 'updatedOn',)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('userId', 'name', 'email',
-                  'login', 'password',
+        model = Comment
+        fields = ('commentId', 'huntId', 'comment',
                   'createdBy', 'updatedBy', 'createdOn', 'updatedOn',)
 
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ('followId', 'huntId', 'userId',
+                  'createdBy', 'updatedBy', 'createdOn', 'updatedOn',)

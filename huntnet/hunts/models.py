@@ -12,8 +12,36 @@ class Hunt(models.Model):
     minimum = models.IntegerField()
     committed = models.IntegerField()
 
-    createdBy = models.ForeignKey('User', related_name='+')
-    updatedBy = models.ForeignKey('User', related_name='+')
+    createdBy = models.ForeignKey('auth.User', related_name='+')
+    updatedBy = models.ForeignKey('auth.User', related_name='+')
+    createdOn = models.DateTimeField(auto_now_add=True)
+    updatedOn = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('createdOn',)
+
+
+class Follow(models.Model):
+    followId = models.CharField(max_length=37, primary_key=True)
+    huntId = models.ForeignKey('Hunt', related_name='+')
+    userId = models.ForeignKey('auth.User', related_name='+')
+
+    createdBy = models.ForeignKey('auth.User', related_name='+')
+    updatedBy = models.ForeignKey('auth.User', related_name='+')
+    createdOn = models.DateTimeField(auto_now_add=True)
+    updatedOn = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('createdOn',)
+
+
+class Comment(models.Model):
+    commentId = models.CharField(max_length=37, primary_key=True)
+    huntId = models.ForeignKey('Hunt', related_name='+')
+    comment = models.CharField(max_length=255)
+
+    createdBy = models.ForeignKey('auth.User', related_name='+')
+    updatedBy = models.ForeignKey('auth.User', related_name='+')
     createdOn = models.DateTimeField(auto_now_add=True)
     updatedOn = models.DateTimeField(auto_now=True)
 
@@ -33,26 +61,10 @@ class Business(models.Model):
     contact = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     website = models.CharField(max_length=255)
-    ownerId = models.ForeignKey('User')
+    ownerId = models.ForeignKey('auth.User', related_name='hunts')
 
-    createdBy = models.ForeignKey('self', related_name='+')
-    updatedBy = models.ForeignKey('self', related_name='+')
-    createdOn = models.DateTimeField(auto_now_add=True)
-    updatedOn = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ('createdOn',)
-
-
-class User(models.Model):
-    userId = models.CharField(max_length=37,  primary_key=True)
-    name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    login = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
-
-    createdBy = models.ForeignKey('User', related_name='+')
-    updatedBy = models.ForeignKey('User', related_name='+')
+    createdBy = models.ForeignKey('auth.User', related_name='+')
+    updatedBy = models.ForeignKey('auth.User', related_name='+')
     createdOn = models.DateTimeField(auto_now_add=True)
     updatedOn = models.DateTimeField(auto_now=True)
 
