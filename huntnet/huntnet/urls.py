@@ -21,8 +21,9 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
 urlpatterns = patterns('',
-                       url(r'^', include(router.urls)),
+                       url(r'^', include('ui.urls')),
+                       url(r'^api/', include(router.urls)),
                        url(r'^admin/', include(admin.site.urls)),
-                       url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-                       url(r'^', include('hunts.urls')))
+                       url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+                       url(r'^api/', include('hunts.urls')))
 
